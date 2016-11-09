@@ -12,7 +12,7 @@ if [ ! -f "/local/$dest" ]; then
     sed -i 's|^push|#push|' /etc/openvpn/openvpn.conf
     echo localhost | ovpn_initpki nopass
     easyrsa build-client-full host nopass
-    ovpn_getclient host | sed "s|localhost 1194|localhost 13194|;s|redirect-gateway.*|route ${network} ${netmask}|;" > "/local/$dest"
+    ovpn_getclient host | sed "s|localhost 1194|localhost 13194|;s|redirect-gateway.*|route ${network} ${netmask}|;" > "/tmp/out/$dest"
 fi
 
 exec ovpn_run
