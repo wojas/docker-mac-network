@@ -2,7 +2,7 @@ version: '2'
 
 services:
   proxy:
-    build: .
+    image: tkaefer/docker-mac-network
     ports:
         - "127.0.0.1:13194:13194"
         #- "127.0.0.1:13194:13194/udp"
