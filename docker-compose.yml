@@ -11,6 +11,10 @@ services:
       - ./out:/tmp/out
     #command: -v UDP4-RECVFROM:13194,fork UDP4-SENDTO:172.17.0.1:1194
     command: TCP-LISTEN:13194,fork TCP:10.64.1.2:1194
+    environment:
+      - FORWARD_PORT=13194
+    networks:
+      backend:
 
   openvpn:
     image: kylemanna/openvpn
