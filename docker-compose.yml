@@ -1,26 +1,44 @@
 version: '2'
 
 services:
-    
-    proxy:
-        build: .
-        ports:
-            - "127.0.0.1:13194:13194"
-            #- "127.0.0.1:13194:13194/udp"
-        # UDP did not work, probably because the source port changes all the time
-        #command: -v UDP4-RECVFROM:13194,fork UDP4-SENDTO:172.17.0.1:1194
-        command: TCP-LISTEN:13194,fork TCP:172.17.0.1:1194
+  proxy:
+    image: tkaefer/docker-mac-network
+    ports:
+        - "127.0.0.1:13194:13194"
+        #- "127.0.0.1:13194:13194/udp"
+    # UDP did not work, probably because the source port changes all the time
+    volumes:
+      - ./out:/tmp/out
+    #command: -v UDP4-RECVFROM:13194,fork UDP4-SENDTO:172.17.0.1:1194
+    command: TCP-LISTEN:13194,fork TCP:10.64.1.2:1194
+    environment:
+      - FORWARD_PORT=13194
+    networks:
+      backend:
 
-    openvpn:
-        image: kylemanna/openvpn
-        volumes:
-            - .:/local
-            - ./config:/etc/openvpn
-        network_mode: host
-        cap_add:
-            - NET_ADMIN
-        environment:
-            dest: docker-for-mac.ovpn
-            DEBUG: '1'
-        command: /local/helpers/run.sh
+  openvpn:
+    image: kylemanna/openvpn
+    volumes_from:
+      - proxy
+    volumes:
+      - ./config:/etc/openvpn
+    cap_add:
+      - NET_ADMIN
+    environment:
+      dest: docker-for-mac.ovpn
+      DEBUG: '1'
+      DOCKER_NETWORK: 10.64.1.0
+      DOCKER_NETMASK: 255.255.255.192
+    command: /local/helpers/run.sh
+    networks:
+      backend:
+        ipv4_address: 10.64.1.2
 
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.64.1.0/26
+          gateway: 10.64.1.1
