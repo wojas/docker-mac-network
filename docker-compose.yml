@@ -10,6 +10,7 @@ services:
         # UDP did not work, probably because the source port changes all the time
         #command: -v UDP4-RECVFROM:13194,fork UDP4-SENDTO:172.17.0.1:1194
         command: TCP-LISTEN:13194,fork TCP:172.17.0.1:1194
+        restart: always
 
     openvpn:
         image: kylemanna/openvpn
@@ -23,4 +24,5 @@ services:
             dest: docker-for-mac.ovpn
             DEBUG: '1'
         command: /local/helpers/run.sh
+        restart: always
 
