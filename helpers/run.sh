@@ -16,4 +16,7 @@ if [ ! -f "/local/$dest" ]; then
     ' > "/local/$dest"
 fi
 
+# Workaround for https://github.com/wojas/docker-mac-network/issues/6
+/sbin/iptables -I FORWARD 1 -i tun+ -j ACCEPT
+
 exec ovpn_run
