@@ -34,6 +34,12 @@ The OpenVPN configuration (`/etc/openvpn/*`) is stored locally in `./config/` so
 
 Since containers running in host networking mode in Docker for Mac cannot bind ports to make them accessible from macOS, we need an extra TCP proxy. This image uses socat to forward port 13194 to the OpenVPN container.
 
+## Using Shimo instead of Tunnelblick
+
+[Shimo](https://www.shimovpn.com) is a proprietary alternative to Tunnelblick.
+Shimo can be used to open `docker-for-mac.ovpn` but by default, all network traffic is routed through the VPN.
+To avoid this, edit the VPN account in Shimo and then click "Advanced" and untick "Send all traffic over VPN".
+
 ## Tips
 
  * Add `restart: always` to both services in `docker-compose.yml` to have them automaticaly restart.
