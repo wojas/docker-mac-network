@@ -12,7 +12,8 @@ if [ ! -f "/local/$dest" ]; then
     easyrsa build-client-full host nopass
     ovpn_getclient host | sed '
     	s|localhost 1194|localhost 13194|;
-	s|redirect-gateway.*|route 172.16.0.0 255.240.0.0|;
+	s|redirect-gateway.*|route 192.168.49.0 255.255.255.0|;
+
     ' > "/local/$dest"
 fi
 

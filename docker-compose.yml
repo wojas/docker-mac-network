@@ -9,7 +9,7 @@ services:
             #- "127.0.0.1:13194:13194/udp"
         # UDP did not work, probably because the source port changes all the time
         #command: -v UDP4-RECVFROM:13194,fork UDP4-SENDTO:172.17.0.1:1194
-        command: TCP-LISTEN:13194,fork TCP:172.17.0.1:1194
+        command: TCP-LISTEN:13194,fork TCP:192.168.49.1:1194
         restart: always
 
     openvpn:
@@ -21,8 +21,12 @@ services:
         cap_add:
             - NET_ADMIN
         environment:
-            dest: docker-for-mac.ovpn
+            dest: minikube-for-mac.ovpn
             DEBUG: '1'
         command: /local/helpers/run.sh
         restart: always
 
+networks:
+    default:
+        external:
+            name: minikube
